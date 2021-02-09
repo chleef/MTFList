@@ -117,7 +117,8 @@ void LL::search(int find){
         bool found = false;
         while(itr != NULL && !found){
             if(find == itr->num) {
-               found = true; 
+               found = true;
+               move_to_front(itr);
             }
             itr = itr->next;
         } //end while
@@ -128,7 +129,17 @@ void LL::search(int find){
 
 //move to front function
 void LL::move_to_front(Node toMove) {
-    
+    if(toMove == head){
+        //all good already first
+    }
+    else {
+        toMove->previous->next = toMove->next;
+        toMove->next->previous = toMove->previous;
+        toMove->previous = NULL;
+        toMove->next = head;
+        head->previous = toMove;
+        head = toMove;
+    }
 } //end function
 
 //remove Node from back
