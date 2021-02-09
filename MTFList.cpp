@@ -34,7 +34,7 @@ class LL {
         ~LL();
         void push_front(int);
         void search(int);
-        void move_to_front(Node);
+        void move_to_front(Node*);
         void pop_back();
         void clear();
         void display();
@@ -45,10 +45,11 @@ class LL {
 int main(int argc, const char * argv[]){
     try{
         LL List;
+        /*
         ifstream File;
-        if(argc < 1)
+        if(argc < 2)
             cout << "not enough arguments" << endl;
-        File.open(argv[0]);
+        File.open(argv[1]);
 
         int count;
         File >> count;
@@ -57,15 +58,22 @@ int main(int argc, const char * argv[]){
             File >> hold;
             List.push_front(hold);
         }
-
+        */
+        List.push_front(1);
+        List.push_front(2);
+        List.push_front(3);
+      //  cout << "in main before display" <<endl;
         List.display();
-
+        cout << "Back in main" << endl;
+      //  List.pop_back(); doesnt work yet
+        List.pop_back();
+        /*
         File >> count;
         for(int i = 1; i < count; i++) {
             File >> hold;
             List.search(hold);
         }
-
+        */
         List.display();
 
 
@@ -74,7 +82,7 @@ int main(int argc, const char * argv[]){
         cout << "Exception caught in main: " << e.what() << endl;
     }
 
-
+    cout << "made it to the end of main" << endl;
     return 0;
 }
 
@@ -105,6 +113,9 @@ void LL::push_front(int input){
     if(head != NULL) {
         head->prev = newNode;
     }
+    else { //list is empty
+        tail = newNode;
+    }
     head = newNode;
 
     count++;
@@ -113,7 +124,7 @@ void LL::push_front(int input){
 //Search function - item searched for will be moved to front of list
 void LL::search(int find){
     if(head != NULL) {
-        Node *itr = head;
+        Node* itr = head;
         bool found = false;
         while(itr != NULL && !found){
             if(find == itr->num) {
@@ -128,22 +139,23 @@ void LL::search(int find){
 }
 
 //move to front function
-void LL::move_to_front(Node toMove) {
+void LL::move_to_front(Node* toMove) {
     if(toMove == head){
         //all good already first
     }
     else {
-        toMove->previous->next = toMove->next;
-        toMove->next->previous = toMove->previous;
-        toMove->previous = NULL;
+        toMove->prev->next = toMove->next;
+        toMove->next->prev = toMove->prev;
+        toMove->prev = NULL;
         toMove->next = head;
-        head->previous = toMove;
+        head->prev = toMove;
         head = toMove;
     }
 } //end function
 
 //remove Node from back
 void LL::pop_back() {
+    cout << "in pop_back()" << endl;
     if(head == NULL) {
         //list is empty
     }
@@ -155,20 +167,24 @@ void LL::pop_back() {
         count --;
     }
     else {
-        Node *current = tail;
+        Node *current = tail->prev;
 
-        tail = tail->prev;
-        tail->next = NULL;
-        tail->prev = current->prev;
+        //tail = tail->prev;
+        //tail->next = NULL;
+        //tail->prev = current->prev;
 
-        delete current;
+        current->next = NULL;
 
+        delete tail;
+
+        tail = current;
         count--;
     }
 }
 
 //Clear function implementation
 void LL::clear() {
+    cout << "in clear" << endl;
     while(tail != NULL){
         pop_back();
     }
@@ -185,4 +201,8 @@ void LL::display() {
         cout << "Node #" << nodeNum++ << " = " <<current->num << endl;
         current = current->next;
     }
+    cout << "Head is pointing at the num: " << head->num << endl;
+    cout << "Tail is pointing at the num: " << tail->num << endl;
+
+    cout << "out of while loop" << endl;
 }
