@@ -13,11 +13,10 @@ Class Node declaration
 class Node {
     public:
         //constructor
-        Node(int in = -1, Node *nPtr = NULL, Node *pPtr = NULL) {num = in, next = nPtr, prev = pPtr;}
+        Node(int in = -1, Node *nPtr = NULL) {num = in, next = nPtr;}
         
         int num;
         Node *next;
-        Node *prev;
 };
 
 /*
@@ -26,6 +25,7 @@ Class Linked List declaration
 class LL {
     private:
         int count;
+        double traversal;
         Node *head;
         Node *tail;
     
@@ -35,9 +35,10 @@ class LL {
         void push_front(int);
         void search(int);
         void move_to_front(Node*);
-        void pop_back();
+        void pop_front();
         void clear();
         void display();
+        double get_traversal();
 
 };
 
@@ -65,8 +66,9 @@ int main(int argc, const char * argv[]){
       //  cout << "in main before display" <<endl;
         List.display();
         cout << "Back in main" << endl;
-      //  List.pop_back(); doesnt work yet
-        List.pop_back();
+
+        List.search(1);
+        cout << "through search, traversals: " << List.get_traversal() << endl;
         /*
         File >> count;
         for(int i = 1; i < count; i++) {
@@ -93,25 +95,26 @@ LL::LL() {
     head = NULL;
     tail = NULL;
     count = 0;
+    traversal = 0;
 }
 
 //deconstructor
 LL::~LL() {
     if(head != NULL)
         clear();
+    cout << "done deconstructing" << endl;
 }
 
 //add node to front function
 void LL::push_front(int input){
     Node *newNode;
 
-    newNode = new Node(input, head, NULL);
+    newNode = new Node(input, head);
 
     newNode->next = head;
-    newNode->prev = NULL;
     
     if(head != NULL) {
-        head->prev = newNode;
+       // head->next = NULL; //this is a test
     }
     else { //list is empty
         tail = newNode;
@@ -125,16 +128,29 @@ void LL::push_front(int input){
 void LL::search(int find){
     if(head != NULL) {
         Node* itr = head;
+        Node* trail = NULL;
         bool found = false;
         while(itr != NULL && !found){
-            if(find == itr->num) {
+            cout << "itr is pointing at " << itr->num << endl;
+            traversal++;
+            if(itr->num == find) {
                found = true;
-               move_to_front(itr);
+               cout << "inside of found if block in search function" << endl;
+               //move_to_front(itr);
+               if(trail != NULL){
+                   if(itr == tail)
+                        tail = trail;
+                   trail->next = itr->next;
+                   itr->next = head;
+                   head = itr;
+               }
+               return;
             }
+            trail = itr;
             itr = itr->next;
         } //end while
         if(!found)
-            cout << find << " not found in list";
+            cout << find << " not found in list" << endl;
     }
 }
 
@@ -144,17 +160,12 @@ void LL::move_to_front(Node* toMove) {
         //all good already first
     }
     else {
-        toMove->prev->next = toMove->next;
-        toMove->next->prev = toMove->prev;
-        toMove->prev = NULL;
-        toMove->next = head;
-        head->prev = toMove;
-        head = toMove;
+       
     }
 } //end function
 
 //remove Node from back
-void LL::pop_back() {
+void LL::pop_front() {
     cout << "in pop_back()" << endl;
     if(head == NULL) {
         //list is empty
@@ -167,17 +178,17 @@ void LL::pop_back() {
         count --;
     }
     else {
-        Node *current = tail->prev;
+        Node *current = head;
 
         //tail = tail->prev;
         //tail->next = NULL;
         //tail->prev = current->prev;
 
-        current->next = NULL;
 
-        delete tail;
+        delete head;
 
-        tail = current;
+        head = current->next;
+
         count--;
     }
 }
@@ -186,7 +197,7 @@ void LL::pop_back() {
 void LL::clear() {
     cout << "in clear" << endl;
     while(tail != NULL){
-        pop_back();
+        pop_front();
     }
 }
 
@@ -205,4 +216,9 @@ void LL::display() {
     cout << "Tail is pointing at the num: " << tail->num << endl;
 
     cout << "out of while loop" << endl;
+}
+
+//traversal functino
+double LL::get_traversal() {
+    return traversal;
 }
