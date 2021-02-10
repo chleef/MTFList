@@ -46,14 +46,14 @@ class LL {
 int main(int argc, const char * argv[]){
     try{
         LL List;
-        
+     
         ifstream File;
-        File.open("P1a_TestFile.txt");
-        /*
+        //File.open("P1a_TestFile.txt");
+        
         if(argc < 2)
             cout << "not enough arguments" << endl;
         File.open(argv[1]);
-        */
+        
         int count;
         File >> count;
         int hold;
