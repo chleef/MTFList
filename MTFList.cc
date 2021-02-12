@@ -79,7 +79,7 @@ int main(int argc, const char * argv[]){
         cout << endl;
         cout << "Traversal Count: " << List.get_traversal() << endl;
 
-
+        File.close();
     }
     catch(exception &e) {
         cout << "Exception caught in main: " << e.what() << endl;
@@ -103,7 +103,9 @@ LL::LL() {
 LL::~LL() {
     if(head != NULL)
         clear();
-  //  cout << "done deconstructing" << endl;
+    delete head;
+    delete tail;
+ //   cout << "done deconstructing" << endl;
 }
 
 //add node to front function
@@ -165,9 +167,9 @@ void LL::move_to_front(Node* toMove) {
     }
 } //end function
 
-//remove Node from back
+//remove Node from front
 void LL::pop_front() {
-   // cout << "in pop_back()" << endl;
+   // cout << "in pop_front()" << endl;
     if(head == NULL) {
         //list is empty
     }
@@ -180,15 +182,15 @@ void LL::pop_front() {
     }
     else {
         Node *current = head;
-
+     //   cout << "getting rid of " << current->num << endl;
         //tail = tail->prev;
         //tail->next = NULL;
         //tail->prev = current->prev;
 
+        head = head->next;
+        delete current;
 
-        delete head;
-
-        head = current->next;
+       // head = current->next;
 
         count--;
     }
@@ -196,7 +198,7 @@ void LL::pop_front() {
 
 //Clear function implementation
 void LL::clear() {
-   // cout << "in clear" << endl;
+  //  cout << "in clear" << endl;
     while(tail != NULL){
         pop_front();
     }
@@ -207,7 +209,7 @@ void LL::display() {
    // cout << "There are: " << count << " Nodes in the list." << endl;
 
     Node *current = head;
-    int nodeNum = 0;
+   // int nodeNum = 0;
 
     while (current != NULL) {
   //    cout << "Node #" << nodeNum++ << " = " <<current->num << endl;

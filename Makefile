@@ -1,20 +1,24 @@
 # Makefile for P1 - MTFList - Clyde leef
 
-CC = g++
-CFLAGS = -pg -Wall -std=c++11
 
-SRCS = ${wildcard *.cpp}
-OBJS = ${SRCS:.cpp=.o}
-INCLS = ${SRCS:.cpp=.h}
+CC = g++
+CFLAGS = -Wall -g
+SRCS = MTFLIST.cc
+
+
+#SRCS = ${wildcard *.cc}
+OBJS = ${SRCS:.cc=.o}
+#INCLS = ${wildcard *.h}
+INCLS = ${SRCS:.cc=.h} MTFList.h
 
 p1: $(OBJS)
-	$(CPP) $(CFLAGS) $(OBJS) -o p1
+	$(CC) $(CFLAGS) $(OBJS) -o p1
 
 $(OBJS):
-	$(CPP) $(CFLAGS) -c $*.cpp
+	$(CC) $(CFLAGS) -c $*.cc
 
 depend: Makefile.dep
-	$(CPP) -MM $(SRCS) > Makefile.dep
+	$(CC) -MM $(SRCS) > Makefile.dep
 
 Makefile.dep:
 	touch Makefile.dep
@@ -23,9 +27,9 @@ Makefile.dep:
 
 submit:
 	rm -f submit.zip
-	zip submit.zip $(SRCS) $(INCLS) Makefile Makefile.dep
+	zip submit.zip $(SRCS) $(INCLS) HONOR Makefile Makefile.dep
 
 clean:
-	rm -f *.o a.out core
+	rm -f $(OBJS) p1 core
 
 include Makefile.dep
