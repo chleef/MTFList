@@ -7,24 +7,19 @@
 class OrderedList {
     private:
         int count;
-        double traversal;
-        Node *head;
-        Node *tail;
+        unsigned traversal;
+        int *aPtr;
     public:
         OrderedList();
+        OrderedList(int);
         ~OrderedList();
-        void push_front(int);
-        bool bi_search(Node*, int);
-        Node* middle(Node*, Node*);
-        void merge_sort(Node**);
-        Node* merge(Node*, Node*);
-        void split_list(Node*, Node**, Node**);
-        void pop_front();
-        void clear();
+        void push_back(int);
+        bool bi_search(int, int, int);
+        void merge_sort(int , int);
+        void merge(int, int, int);
         void display();
-        double get_traversal();
-        Node** get_headPtr();
-        Node* get_head();
+        unsigned get_traversal();
+        int get_count();
 };
 
 
@@ -34,195 +29,183 @@ Ordered List class implementation
 
 //default constructor
 OrderedList::OrderedList() {
-    head = NULL;
-    tail = NULL;
     count = 0;
     traversal = 0;
+    aPtr = NULL;
+}
+
+OrderedList::OrderedList(int size){
+    count = size;
+    traversal = 0;
+    aPtr = new int[size];
 }
 
 //deconstructor
 OrderedList::~OrderedList() {
-    if(head != NULL)
-        clear();
-    delete head;
-    delete tail;
+ //   cout << "made it to orderedlist deconstructor" << endl;
+   // if(count > 0)
+   //     delete aPtr; 
+    //aPtr = NULL;
+    delete aPtr;
+  //  cout << "through orderedlist deconstructor" << endl;
 }
 
 //pushfront function
-void OrderedList::push_front(int input) {
-    Node *newNode;
-
-    newNode = new Node(input, head);
-
-    newNode->next = head;
-    
-    if(head != NULL) {
-       // head->next = NULL; //this is a test
+void OrderedList::push_back(int input) {
+    if(aPtr == NULL) {
+        aPtr = new int[1];
+        aPtr[0] = input;
     }
-    else { //list is empty
-        tail = newNode;
-    }
-    head = newNode;
+    else { 
+    int* tempArray = new int[count + 1];
 
+    for(int i = 0; i < count; i++)
+        tempArray[i] = aPtr[i];
+
+    tempArray[count] = input;
+
+    delete[] aPtr;
+
+    aPtr = tempArray;
+    }
     count++;
 }
 
 //binary search function (use when list is sorted)
-bool OrderedList::bi_search(Node* top, int num) {
-    Node* start = top;
-    Node* last = NULL;
+bool OrderedList::bi_search(int start, int end, int num) {
+    traversal++;
+
+    if(end < start) //number isnt in list
+        return false;
     
-    do {
-        //traversal++;
-        Node* mid = middle(start, last);
-        //middle is empty
-        if(start == NULL)
-            return false;
-        //value present at middle
-        if(mid->num == num)
-            return true;
-        else if(mid->num < num)
-            start = mid->next;
-        else
-            last = mid;
+    int middle = start + (end - start) / 2;
 
-    }
-    while(last == NULL || last != start);
+    if(aPtr[middle] == num) //found it
+        return true;
 
-    return false;
-}
+    if(aPtr[middle] < num) //number is to the right
+        return bi_search(middle + 1, end, num);
 
-//middle function to find midpoint of list for binary search
-Node* OrderedList::middle(Node* front, Node* end) {
-    if(front == NULL)
-        return NULL;
-    
-    Node* slow = front;
-    Node* fast = front->next;
+    else //number is to the left
+        return bi_search(start, middle - 1, num);
 
-    while(fast != end) {
-        fast = fast->next;
-        if(fast != end) {
-            slow = slow->next;
-            fast = fast->next;
-        }
-    }
-    return slow;
 }
 
 //merge sort function
-void OrderedList::merge_sort(Node **headRef) {
-    Node* top = *headRef;
-    Node* a;
-    Node* b;
-
-    if(top == NULL || top->next == NULL) {
+void OrderedList::merge_sort(int start, int end) {
+   // cout << "in merge sort, start = " << start << " end = " << end << endl;
+    if(start >= end) {
+       // cout << "merge_sort is returning" << endl;
         return;
     }
-
-    split_list(top, &a, &b);
-
-    merge_sort(&a);
-    merge_sort(&b);
-
-    *headRef = merge(a, b);
+    int middle = start + (end - start)/2;
+    
+    merge_sort(start, middle);
+    merge_sort(middle + 1, end);
+  //  cout << "through merge_sort ing -- on to merging" << endl;
+    //merge
+    merge(start, middle, end);
+  //  cout << "at the end of merge_sort function" << endl;
     }
 
 //merge function to assist mergesort
-Node* OrderedList::merge(Node* a, Node* b){
-    Node* result = NULL;
+void OrderedList::merge(int start, int middle, int end){
+  //  cout << "in merge" << endl;
+//merge 2nd attempt:
 
-    traversal++; //maybe it goes here?
-    //base cases
-    if(a == NULL)
-        return b;
-    else if(b == NULL)
-        return a;
-    
-    if(a->num <= b->num) {
-        result = a;
-        result->next = merge(a->next, b);
-    }
-    else {
-        result = b;
-        result->next = merge(a, b->next);
-    }
-    return result;
-}
+    int temp[end - start +1];
 
-//split_list to help with mergesort
-void OrderedList::split_list(Node* source, Node** front, Node** back) {
-    Node* fast;
-    Node* slow;
-    slow = source;
-    fast = source->next;
+    int i = start;
+    int j = middle +1;
+    int k = 0;
 
-    //fast goes two nodes, slow one
-    while(fast != NULL) {
-       // traversal++; //maybe this goes here
-        fast = fast->next;
-        if(fast != NULL) {
-            slow = slow->next;
-            fast = fast->next;
+    while(i <= middle && j <= end) {
+        if(aPtr[i] <= aPtr[j]) {
+            traversal++; //maybe it goes here
+            temp[k] = aPtr[i];
+            k++;
+            i++;
+        }
+        else {
+            temp[k] = aPtr[j];
+            k++;
+            j++;
         }
     }
 
-    *front = source;
-    *back = slow->next;
-    slow->next = NULL;
+    //add leftovers
+    while(i<=middle) {
+        temp[k] = aPtr[i];
+        k++;
+        i++;
+    }
 
+    while(j<=end) {
+        temp[k] = aPtr[j];
+        k++;
+        j++;
+    }
+
+    for(i = start; i <= end; i++)
+        aPtr[i] = temp[i-start];
+
+        // merge first attempt
+    /*
+    int size1 = middle - start + 1;
+    int size2 = end - middle;
+
+    int left[size1];
+    int right[size2];
+
+    for(int i = 0; i < size1; i++)
+        left[i] = aPtr[start + i];
+    for(int i = 0; i < size2; i++)
+        right[i] = aPtr[middle + 1 + i];
+
+    //then merge them back
+    int leftindex = 0;
+    int rightindex = 0;
+    int mergedindex = start;
+
+    while(leftindex < size1 && rightindex < size2){
+        if(left[leftindex] <= right[rightindex]) { //left object should go in first
+            aPtr[mergedindex] = left[leftindex];
+            leftindex++;
+        }
+        else {
+            aPtr[mergedindex] = right[rightindex];
+            rightindex++;
+        }
+        mergedindex++;
+    }
+
+    //then deal with the leftovers (if there are any)
+    while(leftindex < size1) {
+        aPtr[mergedindex] = left[leftindex];
+        leftindex++;
+        mergedindex++;
+    }
+
+    while(rightindex < size2) {
+        aPtr[mergedindex] = right[rightindex];
+        rightindex++;
+        mergedindex++;
+    }
+    */
+   //cout << "through merging" << endl;
 }
 
-
-//pop front function (remove front item)
-void OrderedList::pop_front() {
-    // cout << "in pop_front()" << endl;
-    if(head == NULL) {
-        //list is empty
-    }
-    else if(head == tail){
-        //one node in list
-        delete head;
-        head = NULL;
-        tail = NULL;
-        count --;
-    }
-    else {
-        Node *current = head;
-     //   cout << "getting rid of " << current->num << endl;
-        //tail = tail->prev;
-        //tail->next = NULL;
-        //tail->prev = current->prev;
-
-        head = head->next;
-        delete current;
-
-       // head = current->next;
-
-        count--;
-    }
-}
-
-//clear the list
-void OrderedList::clear() {
-    //  cout << "in clear" << endl;
-    while(tail != NULL){
-        pop_front();
-    }
-}
 
 //display the list
 void OrderedList::display() {
     // cout << "There are: " << count << " Nodes in the list." << endl;
     cout << "OrderedList Display: " << endl;
-    Node *current = head;
-   // int nodeNum = 0;
+    
+    for(int i = 0; i < count; i++)
+        cout << aPtr[i] << " ";
 
-    while(current != NULL) {
-  //    cout << "Node #" << nodeNum++ << " = " <<current->num << endl;
-        cout << current->num << " ";
-        current = current->next;
-    }
+    cout << endl;
+
    // cout << "Head is pointing at the num: " << head->num << endl;
    // cout << "Tail is pointing at the num: " << tail->num << endl;
 
@@ -230,16 +213,12 @@ void OrderedList::display() {
 }
 
 //return number of traversals
-double OrderedList::get_traversal() {
+unsigned OrderedList::get_traversal() {
     return traversal;
 }
 
-Node** OrderedList::get_headPtr() {
-    return &head;
-}
-
-Node* OrderedList::get_head() {
-    return head;
+int OrderedList::get_count() {
+    return count;
 }
 
 #endif

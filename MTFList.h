@@ -17,7 +17,7 @@ Class Linked List declaration
 class LL {
     private:
         int count;
-        double traversal;
+        unsigned traversal;
         Node *head;
         Node *tail;
     
@@ -30,7 +30,7 @@ class LL {
         void pop_front();
         void clear();
         void display();
-        double get_traversal();
+        unsigned get_traversal();
 
 };
 
@@ -50,7 +50,7 @@ LL::~LL() {
         clear();
     delete head;
     delete tail;
- //   cout << "done deconstructing" << endl;
+   // cout << "done deconstructing MTFList" << endl;
 }
 
 //add node to front function
@@ -168,7 +168,7 @@ void LL::display() {
 }
 
 //traversal functino
-double LL::get_traversal() {
+unsigned LL::get_traversal() {
     return traversal;
 }
 
