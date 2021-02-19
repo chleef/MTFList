@@ -80,15 +80,18 @@ bool OrderedList::bi_search(int start, int end, int num) {
     
     int middle = start + (end - start) / 2;
 
-    if(aPtr[middle] == num) //found it
+    if(aPtr[middle] == num) { //found it
         return true;
-
-    if(aPtr[middle] < num) //number is to the right
+       // traversal++;
+    }
+    if(aPtr[middle] < num) {//number is to the right
         return bi_search(middle + 1, end, num);
-
-    else //number is to the left
+       // traversal++;
+    }
+    else  {//number is to the left {
         return bi_search(start, middle - 1, num);
-
+       // traversal++;
+    }
 }
 
 //merge sort function
@@ -120,8 +123,8 @@ void OrderedList::merge(int start, int middle, int end){
     int k = 0;
 
     while(i <= middle && j <= end) {
+        traversal++; //maybe it goes here
         if(aPtr[i] <= aPtr[j]) {
-            traversal++; //maybe it goes here
             temp[k] = aPtr[i];
             k++;
             i++;
