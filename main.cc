@@ -62,6 +62,11 @@ int main(int argc, const char * argv[]){
 
         auto end2 = chrono::steady_clock::now();
 
+        OList.display();   
+        cout << endl;
+        MTFList.display();
+        cout << endl;
+
 
         cout << "OrderedList time (in ns) to merge sort and search: " << chrono::duration_cast<chrono::nanoseconds>(end1 - start1).count() << endl;
         cout << "MTFList time (in ns) to search: " << chrono::duration_cast<chrono::nanoseconds>(end2 - start2).count() << endl;
@@ -76,7 +81,7 @@ int main(int argc, const char * argv[]){
         cout << endl;
 
 
-        cout << "List after Queries: " << endl;
+       // cout << "List after Queries: " << endl;
        // MTFList.display();
         cout << endl;
         cout << "MTFList Traversal Count: " << MTFList.get_traversal() << endl;
