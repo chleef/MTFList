@@ -23,6 +23,8 @@ class OrderedList {
         void clear();
         void display();
         double get_traversal();
+        Node** get_headPtr();
+        Node* get_head();
 };
 
 
@@ -71,6 +73,7 @@ bool OrderedList::bi_search(Node* top, int num) {
     Node* last = NULL;
     
     do {
+        traversal++;
         Node* mid = middle(start, last);
         //middle is empty
         if(start == NULL)
@@ -155,6 +158,7 @@ void OrderedList::split_list(Node* source, Node** front, Node** back) {
 
     //fast goes two nodes, slow one
     while(fast != NULL) {
+        traversal++; //maybe this goes here
         fast = fast->next;
         if(fast != NULL) {
             slow = slow->next;
@@ -209,7 +213,7 @@ void OrderedList::clear() {
 //display the list
 void OrderedList::display() {
     // cout << "There are: " << count << " Nodes in the list." << endl;
-
+    cout << "OrderedList Display: " << endl;
     Node *current = head;
    // int nodeNum = 0;
 
@@ -229,6 +233,12 @@ double OrderedList::get_traversal() {
     return traversal;
 }
 
+Node** OrderedList::get_headPtr() {
+    return &head;
+}
 
+Node* OrderedList::get_head() {
+    return head;
+}
 
 #endif

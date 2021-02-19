@@ -152,7 +152,7 @@ void LL::clear() {
 //Display() function implementation
 void LL::display() {
    // cout << "There are: " << count << " Nodes in the list." << endl;
-
+    cout << "MTFList Display: " << endl;
     Node *current = head;
    // int nodeNum = 0;
 

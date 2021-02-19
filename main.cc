@@ -3,7 +3,8 @@
 //Driver
 int main(int argc, const char * argv[]){
     try{
-        LL List;
+        LL MTFList;
+        OrderedList OList;
      
         ifstream File;
         //File.open("P1a_TestFile.txt");
@@ -17,25 +18,35 @@ int main(int argc, const char * argv[]){
         int hold;
         for(int i = 0; i < count; i++) {
             File >> hold;
-            List.push_front(hold);
+            MTFList.push_front(hold);
+            OList.push_front(hold);
         }
 
 
-        cout << "List after Additions: ";
-        List.display();
+        cout << "Lists after Additions: " << endl;
+        MTFList.display();
+        OList.display();
         cout << endl;
       //  cout << "Back in main" << endl;
+
+        OList.merge_sort(OList.get_headPtr());
+
+        cout << "Post merge sort: " << endl;
+
+        OList.display();
 
         File >> count;
         for(int i = 0; i < count; i++) {
             File >> hold;
-            List.search(hold);
+            MTFList.search(hold);
+            OList.bi_search(OList.get_head(),hold);
         }
 
-        cout << "List after Queries: ";
-        List.display();
+        cout << "List after Queries: " << endl;
+        MTFList.display();
         cout << endl;
-        cout << "Traversal Count: " << List.get_traversal() << endl;
+        cout << "MTFList Traversal Count: " << MTFList.get_traversal() << endl;
+        cout << "OrderedList Traversal Count: " << OList.get_traversal() << endl;
 
         File.close();
     }

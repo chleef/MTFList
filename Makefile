@@ -3,7 +3,7 @@
 
 CC = g++
 CFLAGS = -Wall -g
-SRCS = MTFLIST.cc
+SRCS = main.cc
 
 
 #SRCS = ${wildcard *.cc}
