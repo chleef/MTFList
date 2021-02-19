@@ -9,7 +9,7 @@ SRCS = MTFLIST.cc
 #SRCS = ${wildcard *.cc}
 OBJS = ${SRCS:.cc=.o}
 #INCLS = ${wildcard *.h}
-INCLS = ${SRCS:.cc=.h} MTFList.h
+INCLS = ${SRCS:.cc=.h} main.h MTFList.h Node.h OrderedList.h
 
 p1: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o p1
