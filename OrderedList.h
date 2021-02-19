@@ -73,7 +73,7 @@ bool OrderedList::bi_search(Node* top, int num) {
     Node* last = NULL;
     
     do {
-        traversal++;
+        //traversal++;
         Node* mid = middle(start, last);
         //middle is empty
         if(start == NULL)
@@ -132,6 +132,7 @@ void OrderedList::merge_sort(Node **headRef) {
 Node* OrderedList::merge(Node* a, Node* b){
     Node* result = NULL;
 
+    traversal++; //maybe it goes here?
     //base cases
     if(a == NULL)
         return b;
@@ -158,7 +159,7 @@ void OrderedList::split_list(Node* source, Node** front, Node** back) {
 
     //fast goes two nodes, slow one
     while(fast != NULL) {
-        traversal++; //maybe this goes here
+       // traversal++; //maybe this goes here
         fast = fast->next;
         if(fast != NULL) {
             slow = slow->next;

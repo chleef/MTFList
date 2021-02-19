@@ -7,6 +7,7 @@
 #include <exception>
 #include <fstream>
 #include <string>
+#include <chrono>
 
 #include "Node.h"
 #include "MTFList.h"

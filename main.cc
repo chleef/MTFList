@@ -29,12 +29,18 @@ int main(int argc, const char * argv[]){
         cout << endl;
       //  cout << "Back in main" << endl;
 
+        auto start = chrono::steady_clock::now();
+
         OList.merge_sort(OList.get_headPtr());
+
+        auto end  = chrono::steady_clock::now();
+
+        cout << "Time (in ns) to merge sort: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << endl;
 
         cout << "Post merge sort: " << endl;
 
         OList.display();
-
+        cout << endl;
         File >> count;
         for(int i = 0; i < count; i++) {
             File >> hold;
